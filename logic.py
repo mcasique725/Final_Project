@@ -1,6 +1,7 @@
 from PyQt6 import QtCore, QtGui, QtWidgets
 import math
 
+
 class Ui_MainWindow(object):
     def setupUi(self, MainWindow):
 
@@ -105,9 +106,9 @@ class Ui_MainWindow(object):
         self.lineEdit_2 = QtWidgets.QLineEdit(parent=self.centralwidget)
         self.lineEdit_2.setGeometry(QtCore.QRect(460, 210, 201, 51))
         self.lineEdit_2.setObjectName("lineEdit_2")
-        self.pushButton_22 = QtWidgets.QPushButton(parent=self.centralwidget)
-        self.pushButton_22.setGeometry(QtCore.QRect(550, 180, 113, 32))
-        self.pushButton_22.setObjectName("pushButton_22")
+        # self.pushButton_22 = QtWidgets.QPushButton(parent=self.centralwidget)
+        # self.pushButton_22.setGeometry(QtCore.QRect(550, 180, 113, 32))
+        # self.pushButton_22.setObjectName("pushButton_22")
         self.textBrowser = QtWidgets.QTextBrowser(parent=self.centralwidget)
         self.textBrowser.setGeometry(QtCore.QRect(10, 30, 431, 81))
         self.textBrowser.setObjectName("textBrowser")
@@ -157,7 +158,7 @@ class Ui_MainWindow(object):
         self.pushButton_21.setText(_translate("MainWindow", "Submit"))
         self.label.setText(_translate("MainWindow", "Base"))
         self.label_2.setText(_translate("MainWindow", "Height"))
-        self.pushButton_22.setText(_translate("MainWindow", "Submit"))
+        # self.pushButton_22.setText(_translate("MainWindow", "Submit"))
         self.radioButton.hide()
         self.radioButton_2.hide()
         self.radioButton_3.hide()
@@ -165,7 +166,7 @@ class Ui_MainWindow(object):
         self.label.hide()
         self.label_2.hide()
         self.pushButton_21.hide()
-        self.pushButton_22.hide()
+        # self.pushButton_22.hide()
         self.lineEdit_2.hide()
         self.lineEdit.hide()
         self.radioButton.toggled.connect(lambda: self.button_state(self.radioButton))
@@ -203,25 +204,25 @@ class Ui_MainWindow(object):
                 self.label.setText('Radius')
                 self.lineEdit_2.hide()
                 self.label_2.hide()
-                self.pushButton_22.hide()
+                # self.pushButton_22.hide()
 
             if b.text() == 'Square':
                 self.label.setText('Side')
                 self.lineEdit_2.hide()
                 self.label_2.hide()
-                self.pushButton_22.hide()
+                # self.pushButton_22.hide()
             if b.text() == 'Rectangle':
                 self.label_2.show()
                 self.label.setText('Base')
                 self.label_2.setText('Height')
                 self.lineEdit_2.show()
-                self.pushButton_22.show()
+                # self.pushButton_22.show()
             if b.text() == 'Triangle':
                 self.label_2.show()
                 self.label.setText('Base')
                 self.label_2.setText('Height')
                 self.lineEdit_2.show()
-                self.pushButton_22.show()
+                # self.pushButton_22.show()
 
     def mode(self):
 
@@ -238,7 +239,7 @@ class Ui_MainWindow(object):
             self.lineEdit_2.show()
             self.lineEdit.show()
             self.pushButton_21.show()
-            self.pushButton_22.show()
+            # self.pushButton_22.show()
 
         else:
             self.radioButton.hide()
@@ -248,7 +249,7 @@ class Ui_MainWindow(object):
             self.label.hide()
             self.label_2.hide()
             self.pushButton_21.hide()
-            self.pushButton_22.hide()
+            # self.pushButton_22.hide()
             self.lineEdit_2.hide()
             self.lineEdit.hide()
 
@@ -261,7 +262,7 @@ class Ui_MainWindow(object):
             ans = eval(equation)
             self.textBrowser.setText(str(ans))
         except:
-            self.textBrowser.setText("Wrong input")
+            self.textBrowser.setText("No input")
 
     def action_plus(self):
 
@@ -383,25 +384,39 @@ class Ui_MainWindow(object):
 
     def area_func(self):
 
-        """Allows for the calcualtion of area for circle, triangle, square, and rectangle"""
+        """Allows for the calculation of area for circle, triangle, square, and rectangle"""
 
         try:
             if self.radioButton.isChecked():
-                self.area = math.pi * int(self.lineEdit.text()) ** 2
+                radius = int(self.lineEdit.text())
+                if radius <= 0:
+                    raise ValueError("Radius must be a positive integer.")
+                self.area = math.pi * radius ** 2
             elif self.radioButton_2.isChecked():
                 if self.lineEdit.text() and self.lineEdit_2.text():
-                    self.area = int(self.lineEdit.text()) * int(self.lineEdit_2.text())
+                    length = int(self.lineEdit.text())
+                    width = int(self.lineEdit_2.text())
+                    if length <= 0 or width <= 0:
+                        raise ValueError("Both dimensions must be positive integers for rectangle calculation.")
+                    self.area = length * width
                 else:
                     raise ValueError("Both dimensions are required for rectangle calculation.")
             elif self.radioButton_3.isChecked():
-                self.area = int(self.lineEdit.text()) ** 2
+                side = int(self.lineEdit.text())
+                if side <= 0:
+                    raise ValueError("Side length must be a positive integer for square calculation.")
+                self.area = side ** 2
             elif self.radioButton_4.isChecked():
                 if self.lineEdit.text() and self.lineEdit_2.text():
-                    self.area = 0.5 * int(self.lineEdit.text()) * int(self.lineEdit_2.text())
+                    base = int(self.lineEdit.text())
+                    height = int(self.lineEdit_2.text())
+                    if base <= 0 or height <= 0:
+                        raise ValueError("Both base and height must be positive integers for triangle calculation.")
+                    self.area = 0.5 * base * height
                 else:
                     raise ValueError("Both dimensions are required for triangle calculation.")
-            formated_area = "{:.5g}".format(self.area)
-            self.textBrowser.setText(f'Area: {formated_area}')
+            formatted_area = "{:.5g}".format(self.area)
+            self.textBrowser.setText(f'Area: {formatted_area}')
         except ValueError as ve:
             self.textBrowser.setText(str(ve))
         except Exception as e:
@@ -417,5 +432,3 @@ if __name__ == "__main__":
     ui.setupUi(MainWindow)
     MainWindow.show()
     sys.exit(app.exec())
-
-
